@@ -1,0 +1,22 @@
+{
+  "name": "daniBoutique",
+  "version": "1.0.0",
+  "description": "MEAN API",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon .",
+    "start": "node index.js"
+  },
+  "author": "Tomas Ruiz Diaz",
+  "license": "ISC",
+  "devDependencies": {
+    "nodemon": "^2.0.7"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.18.2",
+    "mongoose": "^5.11.13",
+    "multer": "^1.4.5-lts.1"
+  }
+}
