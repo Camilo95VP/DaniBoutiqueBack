@@ -1,13 +1,54 @@
 const Producto = require('../models/producto');
+const multer = require('multer');
+const path = require('path');
 
-// Controlador para crear un nuevo producto
+// Configura multer para guardar el archivo con su nombre original
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'public/uploads/');
+  },
+  filename: (req, file, cb) => {
+    // Usa el nombre original del archivo
+    const originalFileName = file.originalname.replace('.png.png', '.png');
+    cb(null, originalFileName);
+    
+  },
+});
+
+const upload = multer({ storage });
+
 exports.createProducto = async (req, res) => {
   try {
-    const nuevoProducto = new Producto(req.body);
-    const productoGuardado = await nuevoProducto.save();
-    console.log(productoGuardado)
-    res.status(201).json(productoGuardado);
+    upload.single('imagen')(req, res, async (err) => {
+      if (err) {
+        console.error('Error al cargar la imagen:', err);
+        res.status(500).json({ message: 'Error al cargar la imagen', error: err.message });
+        return;
+      }
+      
+      // Si no hay errores al cargar la imagen, continúa con la creación del producto
+      const { nombre, precio, color } = req.body;
+      const originalFileName = req.file.originalname.replace('.png.png', '.png');;
+      const imagen = originalFileName; // Usamos el nombre original del archivo
+
+      // Dividir la cadena de colores en un array
+        const coloresArray = color.split(',').map(color => color.trim());
+        // Resto de tu lógica aquí...
+  
+
+      const nuevoProducto = new Producto({
+        nombre,
+        precio,
+        imagen,
+        color: coloresArray,
+      });
+
+      const productoGuardado = await nuevoProducto.save();
+      res.status(201).json(productoGuardado);
+      console.log(productoGuardado);
+    });
   } catch (error) {
+    console.error('Error al crear el producto:', error);
     res.status(500).json({ message: 'Error al crear el producto', error: error.message });
   }
 };

@@ -1,9 +1,8 @@
-// Rutas para producto
 const express = require('express');
 const router = express.Router();
 const productoController = require('../controllers/productosController');
 
-// api/productos
+// api/bolsos (ruta base: /api/bolsos)
 router.post('/', productoController.createProducto);
 router.get('/', productoController.getAllProductos);
 router.put('/:id', productoController.updateProducto);
